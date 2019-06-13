@@ -1,6 +1,7 @@
 import sys
 import id_processing
 import ml
+import pandas as pd
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
