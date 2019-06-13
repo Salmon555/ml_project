@@ -32,10 +32,10 @@ class Mainwindow(QWidget):
         output = self.prod_idEdit.text()
         output = self.processing_id(output)
         if output[1] != "":
-            machine = id_processing.machine_type(output[0]) + "\n" + id_processing.machine_type(output[1])
+            machine = id_processing.machine_type(output[0])[:-1] + "\n" + id_processing.machine_type(output[1])[:-1]
         else:
-            machine = id_processing.machine_type(output[0])
-        output = "Two_status_sequence: " + output[0] + "\n" + output[1] + "\n" + "Machine_sequence: " + "\n" + machine
+            machine = id_processing.machine_type(output[0])[:-1]
+        output = "Two_status_sequence: " + "\n" + output[0] + "\n" + output[1] + "\n" + "Machine_sequence: " + "\n" + machine
 
 
         QMessageBox.information(self, "status and machine type", output)  # print the output
