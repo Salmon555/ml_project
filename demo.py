@@ -31,7 +31,14 @@ class Mainwindow(QWidget):
     def show_status(self):
         output = self.prod_idEdit.text()
         output = self.processing_id(output)
-        QMessageBox.information(self, "status", output)  # print the output
+        if output[1] != "":
+            machine = id_processing.machine_type(output[0]) + "\n" + id_processing.machine_type(output[1])
+        else:
+            machine = id_processing.machine_type(output[0])
+        output = "Two_status_sequence: " + output[0] + "\n" + output[1] + "\n" + "Machine_sequence: " + "\n" + machine
+
+
+        QMessageBox.information(self, "status and machine type", output)  # print the output
 
     def processing_id(self, id):  # processing product_id
         output = id_processing.id_processing(id) + ml.ml_output(id)
@@ -40,7 +47,7 @@ class Mainwindow(QWidget):
         status_list = output.split("-")
         status_list = list(set(status_list))  # drop duplicates
         output = id_processing.time_order(status_list)
-
+        #output = id_processing.machine_type(output)
         return output
 
     # def on_ok_clicked(self):

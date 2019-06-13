@@ -73,15 +73,46 @@ def time_order(input: list): # Transforming the status into a status_time_sequen
     final_dic = {}  # The key is the sorted string, the values is a list, the first element is the most popular status chronologically
     # The second element is the number of its apperance.
     for key, values in temp_dic.items():
-        final_dic[sort_str(key)] = ["", 0]
+        final_dic[sort_str(key)] = [["", 0],["",0]]  ### Preserving two biggest number
     for key, values in temp_dic.items():
-        if final_dic[sort_str(key)][1] < values:
-            final_dic[sort_str(key)] = [key, values]
+        if final_dic[sort_str(key)][0][1] <= final_dic[sort_str(key)][1][1]:
+            if final_dic[sort_str(key)][0][1] <= values:
+                final_dic[sort_str(key)][0] = [key, values]
+        else:
+            if final_dic[sort_str(key)][1][1] <= values:
+                final_dic[sort_str(key)][1] = [key, values]
     if output in final_dic.keys():
-        output = final_dic[output][0]
+        output = [final_dic[output][0][0],final_dic[output][1][0]]
     return output
 
+    ### output is a list of str
+
 def machine_type(string: str): ##Output the machine-type in time order
-    list_of_status=string.split("-")
+    list_of_status = string.split("-")
+    output = ""
+    machine_type8_list = ["444", "366", "488", "424"]
+    machine_type10_list = ["502", "506", "344", "372", "478"]
+    machine_type8and10_list = ["430", "490", "480", "310", "12"]
+    for status in list_of_status:
+        if status == "3":
+            output += "1- "
+        elif status == "5":
+            output += "2- "
+        elif status == "200":
+            output += "3- "
+        elif status == "202":
+            output += "4- "
+        elif status == "204":
+            output += "5- "
+        elif status in machine_type8_list:
+            output += "8- "
+        elif status in machine_type10_list:
+            output+= "10- "
+        elif status in machine_type8and10_list:
+            output+= "8or10- "
+    return output[:-1]
+
+
+
 
 
