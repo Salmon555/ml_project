@@ -12,7 +12,7 @@ def sort_str(string: str):  # sorting the string like "10-11-204-205-39-40"
 
 
 def id_processing(id):
-    output = "10-11-39-40-"  #"10-11-39-40" exist in every row
+    output = "10-11-39-40-"  # "10-11-39-40" exist in every row
     id_list = id.split("-")
     prefix = id_list[0]
     if "FAK" in prefix:
@@ -55,7 +55,7 @@ def id_processing(id):
     return output
 
 
-def time_order(input: list): # Transforming the status into a status_time_sequence
+def time_order(input: list):  # Transforming the status into a status_time_sequence
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(cur_dir, 'time_order.csv')
 
@@ -73,7 +73,8 @@ def time_order(input: list): # Transforming the status into a status_time_sequen
     final_dic = {}  # The key is the sorted string, the values is a list, the first element is the most popular status chronologically
     # The second element is the number of its apperance.
     for key, values in temp_dic.items():
-        final_dic[sort_str(key)] = [["", 0],["",0]]  ### Preserving two biggest number
+        # Preserving two biggest number
+        final_dic[sort_str(key)] = [["", 0], ["", 0]]
     for key, values in temp_dic.items():
         if final_dic[sort_str(key)][0][1] <= final_dic[sort_str(key)][1][1]:
             if final_dic[sort_str(key)][0][1] <= values:
@@ -82,12 +83,13 @@ def time_order(input: list): # Transforming the status into a status_time_sequen
             if final_dic[sort_str(key)][1][1] <= values:
                 final_dic[sort_str(key)][1] = [key, values]
     if output in final_dic.keys():
-        output = [final_dic[output][0][0],final_dic[output][1][0]]
+        output = [final_dic[output][0][0], final_dic[output][1][0]]
     return output
 
-    ### output is a list of str
+    # output is a list of str
 
-def machine_type(string: str): ##Output the machine-type in time order
+
+def machine_type(string: str):  # Output the machine-type in time order
     list_of_status = string.split("-")
     output = ""
     machine_type8_list = ["444", "366", "488", "424"]
@@ -107,12 +109,27 @@ def machine_type(string: str): ##Output the machine-type in time order
         elif status in machine_type8_list:
             output += "8- "
         elif status in machine_type10_list:
-            output+= "10- "
+            output += "10- "
         elif status in machine_type8and10_list:
-            output+= "8or10- "
+            output += "8or10- "
     return output[:-1]
 
 
-
-
-
+def product_id_to_size(input_: str):
+    list_ = input_.split("-")
+    d_size, l_size = "", ""
+    for word in list_:
+        if d_size == "":
+            for char in word:
+                if char.isdigit() == True:
+                    d_size += char
+        else:
+            if l_size == "":
+                for char in word:
+                    if char.isdigit() == True:
+                        l_size += char
+            else:
+                break
+    d_size = int(d_size)
+    l_size = int(l_size)
+    return [d_size, l_size]
