@@ -3,6 +3,7 @@ import numpy as np
 import re
 import os
 import sklearn
+import data_processing_functions
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -16,7 +17,7 @@ from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 
 
-def ml_output(id):  # Using machine learning to predict status
+def ml_on_status(id) -> str:  # Using machine learning to predict status
     status = pd.read_csv('.\\data.csv')
     x = status["in_prod_name"]
     y_main = status["category"]
@@ -65,11 +66,12 @@ def ml_output(id):  # Using machine learning to predict status
     state = mnb.predict(vec.transform([id]))
     if state == 1:
         output += "12-13-"
+    
     return output
 
 
-def ml_machine_size(input: tuple):
-    order = pd.read_csv("D:\\summer_python\\order.csv")
+def ml_on_machine_size(input: tuple):
+    order = pd.read_csv(".\\order.csv")
     order = order[["in_prod_name", "d_size", "l_size", "mac_cd1", "mac_cd2"]]
 
     l = list(order["l_size"].astype(int))
@@ -80,42 +82,18 @@ def ml_machine_size(input: tuple):
     x_train = []
     for i in range(0, len(l)):
         x_train.append((l[i], d[i]))
-    mac1_low = ["N00069", "N00106", "N00107", "N00138", "T00050", "T00054"]
-    mac1_medium = [
-        "N00007",
-        "N00008",
-        "N00015",
-        "N00023",
-        "N00024",
-        "N00052",
-        "N00054",
-        "N00084",
-        "N00085",
-        "N00086",
-        "N00087",
-        "N00110",
-        "N00111"]
-    mac1_high = [
-        "N00040",
-        "N00041",
-        "N00056",
-        "N00070",
-        "N00108",
-        "N00109",
-        "N00146"]
-    mac2_low = ["T00010", "T00041", "T00176"]
-    mac2_medium = ["N00090", "T00006", "T00008", "T00037", "T00038", "T00127"]
-    mac2_high = ["T00009", "T00033", "T00039", "T00199", "T00200"]
+    
+    machine_dictionary = data_processing_functions.txt_to_dictionary("machine_type_dic")
 
     x1_new, x2_new, mac1_new, mac2_new = [], [], [], []  # Machine learning training set
     for i in range(0, len(x_train)):
-        if mac1[i] in mac1_low:
+        if mac1[i] in machine_dictionary["mac1_low"]:
             x1_new.append(x_train[i])
             mac1_new.append("1")
-        elif mac1[i] in mac1_medium:
+        elif mac1[i] in machine_dictionary["mac1_medium"]:
             x1_new.append(x_train[i])
             mac1_new.append("2")
-        elif mac1[i] in mac1_high:
+        elif mac1[i] in machine_dictionary["mac1_high"]:
             x1_new.append(x_train[i])
             mac1_new.append("3")
         elif mac1[i] == "0":
@@ -123,13 +101,13 @@ def ml_machine_size(input: tuple):
             mac1_new.append("0")
         else:
             continue
-        if mac2[i] in mac2_low:
+        if mac2[i] in machine_dictionary["mac2_low"]:
             x2_new.append(x_train[i])
             mac2_new.append("1")
-        elif mac2[i] in mac2_medium:
+        elif mac2[i] in machine_dictionary["mac2_medium"]:
             x2_new.append(x_train[i])
             mac2_new.append("2")
-        elif mac2[i] in mac2_high:
+        elif mac2[i] in machine_dictionary["mac2_high"]:
             x2_new.append(x_train[i])
             mac2_new.append("3")
         elif mac2[i] == "0":

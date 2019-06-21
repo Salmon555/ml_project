@@ -2,6 +2,7 @@ import sys
 import id_processing
 import ml
 import pandas as pd
+import data_processing_functions
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -31,24 +32,37 @@ class Mainwindow(QWidget):
     def show_status(self):
         output = self.prod_idEdit.text()
         [d_size, l_size] = id_processing.product_id_to_size(output)
-        machine_size_type = ml.ml_machine_size((l_size, d_size))
+        machine_size_type = ml.ml_on_machine_size((l_size, d_size))
+        print(machine_size_type[0])
+        print(machine_size_type[1])
         output = self.processing_id(output)
         if output[1] != "":
-            machine = id_processing.machine_type(
-                output[0])[:-1] + "\n" + id_processing.machine_type(output[1])[:-1]
+            machine_sequence1 = id_processing.machine_type(output[0])[:-1]
+            machine_sequence2 = id_processing.machine_type(output[1])[:-1]
+            if machine_sequence1 == machine_sequence2:
+                machine = data_processing_functions.machine_sequence_to_machine_name(machine_sequence1,int(machine_size_type[0]),int(machine_size_type[1]))
+                machine += "\n" + "Corresponding sequence:" +"\n" +data_processing_functions.status_to_usefulstatus(output[0])
+            else:
+                machine = data_processing_functions.machine_sequence_to_machine_name(machine_sequence1,int(machine_size_type[0]),int(machine_size_type[1]))
+                machine += "\n"
+                machine += data_processing_functions.machine_sequence_to_machine_name(machine_sequence2,int(machine_size_type[0]),int(machine_size_type[1]))
+                machine += "\n" + "Corresponding sequence:" +"\n" +data_processing_functions.status_to_usefulstatus(output[0])
+                machine += "\n" + data_processing_functions.status_to_usefulstatus(output[1])
         else:
-            machine = id_processing.machine_type(output[0])[:-1]
+            machine_sequence1 = id_processing.machine_type(output[0])[:-1]
+            machine = data_processing_functions.machine_sequence_to_machine_name(machine_sequence1,machine_size_type[0],machine_size_type[1])
+            machine += "\n" + data_processing_functions.status_to_usefulstatus(output[0])
         output = "Two_status_sequence: " + "\n" + output[0] + "\n" + output[1] + "\n" + "Machine_sequence: " + \
-            "\n" + machine + "\n" + "machine_size_type:" + "\n" + \
-            str(machine_size_type[0]) + str(machine_size_type[1])
+        "\n" + machine 
+        
 
         QMessageBox.information(
             self,
             "status and machine type",
             output)  # print the output
 
-    def processing_id(self, id):  # processing product_id
-        output = id_processing.id_processing(id) + ml.ml_output(id)
+    def processing_id(self, id) -> str:   # processing product_id
+        output = id_processing.id_processing(id) + ml.ml_on_status(id)
 
         if output[-1] == "-":
             output = output[:-1]

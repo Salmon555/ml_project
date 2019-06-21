@@ -2,16 +2,16 @@ import pandas as pd
 import os
 
 
-def sort_str(string: str):  # sorting the string like "10-11-204-205-39-40"
-    lis = string.split("-")
-    lis = sorted(lis)
+def sort_str(string: str) -> str:  # sorting the string like "10-11-204-205-39-40"
+    list_ = string.split("-")
+    list_ = sorted(list_)
     output = ""
-    for i in lis:
+    for i in list_:
         output += i + "-"
     return output[:-1]
 
 
-def id_processing(id):
+def id_processing(id) -> str:
     output = "10-11-39-40-"  # "10-11-39-40" exist in every row
     id_list = id.split("-")
     prefix = id_list[0]
@@ -86,10 +86,8 @@ def time_order(input: list):  # Transforming the status into a status_time_seque
         output = [final_dic[output][0][0], final_dic[output][1][0]]
     return output
 
-    # output is a list of str
 
-
-def machine_type(string: str):  # Output the machine-type in time order
+def machine_type(string: str) -> str:  # Output the machine-type in time order
     list_of_status = string.split("-")
     output = ""
     machine_type8_list = ["444", "366", "488", "424"]
@@ -97,21 +95,21 @@ def machine_type(string: str):  # Output the machine-type in time order
     machine_type8and10_list = ["430", "490", "480", "310", "12"]
     for status in list_of_status:
         if status == "3":
-            output += "1- "
+            output += "1(" + status + ")- "
         elif status == "5":
-            output += "2- "
+            output += "2(" + status + ")- "
         elif status == "200":
-            output += "3- "
+            output += "3(" + status + ")- "
         elif status == "202":
-            output += "4- "
+            output += "4(" + status + ")- "
         elif status == "204":
-            output += "5- "
+            output += "5(" + status + ")- "
         elif status in machine_type8_list:
-            output += "8- "
+            output += "8(" + status + ")- "
         elif status in machine_type10_list:
-            output += "10- "
+            output += "10(" + status + ")- "
         elif status in machine_type8and10_list:
-            output += "8or10- "
+            output += "8or10(" + status + ")- "
     return output[:-1]
 
 
