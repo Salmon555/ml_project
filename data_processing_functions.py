@@ -1,4 +1,8 @@
-def txt_to_dictionary(name) -> dict:
+### functions for data_processing
+
+
+
+def txt_to_dictionary(name) -> dict:   ###read .txt file into a dictionary
     dic={}
     file = open(name+'.txt','r')
 
@@ -21,11 +25,13 @@ def get_intersection(listA: list,listB: list):
 			Rlist.append(i)
 	return Rlist
 
+
 def list_to_string(listA: list) -> str:
 	output="("
 	for i in listA:
 		output += i+","
 	return output[:-1]+")"
+
 
 def machine_sequence_to_machine_name(string: str, cd1:int, cd2:int) -> str:
 	size_dic = txt_to_dictionary("machine_type_dic")
@@ -63,10 +69,12 @@ def machine_sequence_to_machine_name(string: str, cd1:int, cd2:int) -> str:
 
 	return output[:-1]
 
-def status_to_usefulstatus(string: str) -> str:
+
+def status_to_usefulstatus(string: str) -> str:   ### Filter out sequences without corresponding machines
 	output = ""
 	list_ = string.split("-")
+	usefulstatus_list = ["3","5","200","202","204","444", "366", "488", "424","502", "506", "344", "372", "478","430", "490", "480", "310", "12"]
 	for i in list_:
-		if i in ["3","5","200","202","204","444", "366", "488", "424","502", "506", "344", "372", "478","430", "490", "480", "310", "12"]:
+		if i in usefulstatus_list:
 			output += i+"-"
 	return output[:-1]

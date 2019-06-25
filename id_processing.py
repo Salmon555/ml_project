@@ -1,8 +1,10 @@
+### functions for processing product_id
+
 import pandas as pd
 import os
 
 
-def sort_str(string: str) -> str:  # sorting the string like "10-11-204-205-39-40"
+def sort_str(string: str) -> str:  # sorting status_sequence
     list_ = string.split("-")
     list_ = sorted(list_)
     output = ""
@@ -11,11 +13,11 @@ def sort_str(string: str) -> str:  # sorting the string like "10-11-204-205-39-4
     return output[:-1]
 
 
-def id_processing(id) -> str:
+def id_processing(id) -> str:   # making product_id into status_sequence
     output = "10-11-39-40-"  # "10-11-39-40" exist in every row
     id_list = id.split("-")
     prefix = id_list[0]
-    if "FAK" in prefix:
+    if "FAK" in prefix:      # These following principles are summarized through data analysis
         output += "502-503-"
     id_list = id_list[1:]
     if "WSC" in id and "X" in id:
@@ -62,7 +64,7 @@ def time_order(input: list):  # Transforming the status into a status_time_seque
     output = ""
     for i in input:
         output += i + "-"
-    output = sort_str(output[:-1])  # Making it a sorted_str
+    output = sort_str(output[:-1])  # Making it a sorted_string
 
     time = pd.read_csv(file_path)
     temp_list = list(time["pro_status_cd"])
@@ -116,6 +118,7 @@ def machine_type(string: str) -> str:  # Output the machine-type in time order
 def product_id_to_size(input_: str):
     list_ = input_.split("-")
     d_size, l_size = "", ""
+    
     for word in list_:
         if d_size == "":
             for char in word:
